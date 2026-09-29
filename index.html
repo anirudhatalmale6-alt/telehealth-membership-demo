@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Virtual Primary Care from $35/month — [Your Brand]</title>
-<meta name="description" content="A dedicated doctor, 24/7 urgent care, dermatology and counselling included. From $35 a month. Enrol online in minutes.">
+<title>Virtual Primary Care for $60/month — [Your Brand]</title>
+<meta name="description" content="A dedicated doctor, 24/7 urgent care, dermatology and counselling included. $60 a month, no contract. Enrol online in minutes.">
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -351,11 +351,11 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
          counselling and care navigation</b> — all included, no visit fees, no insurance needed.</p>
 
       <div class="pricebox">
-        <span class="price" id="heroPrice">$35</span>
+        <span class="price" id="heroPrice">$60</span>
         <span class="per">per month</span>
-        <span class="save" id="heroSave">Save 42%</span>
+        <span class="save" id="heroSave" style="display:none"></span>
       </div>
-      <p class="billed" id="heroBilled">Billed $105 for 3 months. Month-to-month available at $60.</p>
+      <p class="billed" id="heroBilled">Billed $60 monthly, renewing until you cancel.</p>
 
       <div class="cta-row">
         <a href="#enrol" class="btn btn-primary" data-enrol>Start my membership
@@ -497,7 +497,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
           <span class="step-n">1</span>
         </div>
         <h3>Choose your term</h3>
-        <p>Month-to-month is $60. Commit to three months or longer and it drops to $35 a month. The care is identical either way.</p>
+        <p>One plan, $60 a month, no contract. Start today and stop whenever you want — there is nothing to commit to up front.</p>
       </div>
       <div class="step">
         <div class="step-top">
@@ -576,14 +576,14 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <div class="cmp-row"><span>Doctor visits, unlimited</span><b>Included</b></div>
         <div class="cmp-row"><span>Dermatology consult</span><b>Included</b></div>
         <div class="cmp-row"><span>Counselling session &times; 2</span><b>Included</b></div>
-        <div class="cmp-total"><span>Total for the year</span><span>$420</span></div>
+        <div class="cmp-total"><span>Total for the year</span><span id="cmpYear">$720</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- =============================================================== terms -->
-<section class="sec" id="enrol-terms">
+<section class="sec" id="termsSection">
   <div class="wrap">
     <div class="sec-head">
       <h2>Pick a term</h2>
@@ -716,11 +716,15 @@ var ENROL_SERVICE = '';   /* primary-care | urgent-care | mental-health | dermat
 var LEAD_URL   = '';          /* Apps Script endpoint, same pattern as crashclaimreview */
 var LEAD_SECRET= '';
 
+/* Month-to-month only, by the client's decision, to launch with the lowest
+   possible barrier: no commitment to weigh up, one number to accept.
+
+   Everything downstream is computed from this array -- the headline price, the
+   billing line, the year-cost comparison, and whether the term chooser appears
+   at all. Adding the longer terms back is a matter of restoring the rows; no
+   copy anywhere hard-codes a figure that would then go stale. */
 var PLANS = [
-  {months:1,  total:60,  label:'Monthly'},
-  {months:3,  total:105, label:'3 months'},
-  {months:6,  total:210, label:'6 months'},
-  {months:12, total:420, label:'12 months'}
+  {months:1,  total:60,  label:'Monthly'}
 ];
 
 /* -------------------------------------------------------------- price maths
@@ -736,13 +740,12 @@ var monthly = PLANS[0];
    hard-coded to "the longest term", because that is only the best deal if the
    pricing actually rewards committing longer.
 
-   On the current numbers 3, 6 and 12 months all come to $35/mo, so the longest
-   term is not better value than the shortest of them — it just locks the
-   customer in for longer at the same rate. We therefore recommend the SHORTEST
-   term that achieves the lowest price, and only award a "Best value" badge when
-   one term is strictly cheaper than every other. Badging a 12-month commitment
-   as "best value" against an identically-priced 3-month one would be a claim
-   the numbers do not support. */
+   Only one plan is offered at present, so this resolves to it. The logic is
+   kept because it is what makes adding the longer terms back safe: it picks the
+   SHORTEST term achieving the lowest per-month price, and only awards a "Best
+   value" badge when one term is strictly cheaper than every other. When the
+   longer terms were live they were all the same per-month rate, so badging the
+   12-month one would have been a claim the numbers did not support. */
 var lowestPM = Math.min.apply(null, PLANS.map(perMonth));
 var atLowest = PLANS.filter(function(p){ return perMonth(p) === lowestPM; });
 var best     = atLowest[0];                      /* shortest term at the best rate */
@@ -758,9 +761,12 @@ function renderHero(){
      it before the click, not after. */
   document.getElementById('heroBilled').textContent =
     (best.months === 1
-      ? 'Billed $' + perMonth(monthly).toFixed(0) + ' monthly, renewing until you cancel.'
-      : 'Billed ' + money(best.total) + ' every ' + best.months + ' months, renewing until you cancel.') +
-    ' Month-to-month available at ' + money(perMonth(monthly)) + '.';
+      ? 'Billed ' + money(perMonth(monthly)) + ' monthly, renewing until you cancel.'
+      : 'Billed ' + money(best.total) + ' every ' + best.months + ' months, renewing until you cancel.')
+    /* Only mention the monthly fallback when it is a DIFFERENT option. With a
+       single monthly plan, "month-to-month available at $60" restates the line
+       it is attached to and reads like a mistake. */
+    + (best.months === 1 ? '' : ' Month-to-month available at ' + money(perMonth(monthly)) + '.');
 
   /* The enrol button names the term it will actually send them to. */
   var cta = document.getElementById('termCta');
@@ -772,11 +778,27 @@ function renderHero(){
   var pct = Math.round((1 - perMonth(best) / perMonth(monthly)) * 100);
   var el  = document.getElementById('heroSave');
   if (pct > 0) { el.textContent = 'Save ' + pct + '%'; } else { el.style.display = 'none'; }
+
+  /* The "what one year costs" figure is the recommended plan run for twelve
+     months. It was hard-coded at $420 when the annual term existed; on the
+     $60 monthly plan that would have quietly understated the real cost by
+     $300 while sitting next to a $1,170 comparison, which is precisely the
+     sort of stale number that turns a fair comparison into a false one. */
+  var yr = document.getElementById('cmpYear');
+  if (yr) yr.textContent = money(perMonth(best) * 12);
 }
 
 function renderTerms(){
   var wrap = document.getElementById('terms');
   wrap.innerHTML = '';
+
+  /* With a single plan there is nothing to choose between, and a lone card
+     under the heading "Pick a term" reads as a page with something missing.
+     Hide the whole section; the hero already states the price and the buttons
+     still hand over correctly. */
+  var sect = document.getElementById('termsSection');
+  if (PLANS.length < 2) { if (sect) sect.style.display = 'none'; return; }
+  if (sect) sect.style.display = '';
   PLANS.forEach(function(p){
     var isPick = (p === best);
     var d = document.createElement('div');
