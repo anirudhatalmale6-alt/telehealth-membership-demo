@@ -124,8 +124,12 @@ h1{font-size:clamp(2.1rem,4.4vw,3.15rem);margin-bottom:18px}
 
 /* hero art: the client's photograph, with one small badge over the corner */
 .hero-art{position:relative}
-.hero-img{width:100%;height:auto;display:block;border-radius:22px;
-          box-shadow:var(--shadow);background:var(--blue-l)}
+.hero-img{width:100%;height:auto;aspect-ratio:7/6;object-fit:cover;object-position:center 42%;
+          display:block;border-radius:22px;box-shadow:var(--shadow);background:var(--blue-l)}
+/* height:auto is load-bearing. The img carries width/height attributes so the
+   browser can reserve space before the file arrives, but those attributes are
+   presentational hints -- and with no height declared in CSS, the hint wins
+   over aspect-ratio and the photo renders at its full 933px natural height. */
 .hero-badge{position:absolute;left:-26px;bottom:-20px;background:#fff;border:1px solid var(--line);
             border-radius:14px;box-shadow:var(--shadow);padding:13px 17px;display:flex;
             gap:11px;align-items:flex-start;max-width:290px}
@@ -353,9 +357,9 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
     </div>
 
     <div class="hero-art">
-      <img class="hero-img" src="img/hero-family.jpg"
-           alt="A mother and daughter waving at a doctor during a video visit at home"
-           width="810" height="700">
+      <img class="hero-img" src="img/hero-call.jpg"
+           alt="A woman at home on a video call with a doctor on her phone"
+           width="1400" height="933" fetchpriority="high">
       <div class="hero-badge">
         <span class="hb-dot"></span>
         <div><b>Licensed providers, all 50 states</b><span>Most visits answered within the hour</span></div>
