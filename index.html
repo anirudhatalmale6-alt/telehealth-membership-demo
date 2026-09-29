@@ -200,12 +200,18 @@ h1{font-size:clamp(2.1rem,4.4vw,3.15rem);margin-bottom:18px}
 .why-item span{font-size:.88rem;color:var(--body);display:block;line-height:1.45}
 
 /* what we treat — photo tiles, matching the client's reference */
-.treat{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.treat{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
+.treat-item{flex:0 1 calc(25% - 12px)}
 .treat-item{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;
             display:block;text-align:left;text-decoration:none;color:inherit;
             transition:transform .18s, box-shadow .18s}
 .treat-item:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
-.treat-img{width:100%;aspect-ratio:16/11;object-fit:cover;display:block;background:var(--blue-l)}
+.treat-img{width:100%;height:auto;aspect-ratio:1/1;object-fit:cover;display:block;
+           background:var(--blue-l)}
+/* height:auto again. The img carries width/height attributes so space is
+   reserved before the file lands, but those are presentational hints and beat
+   aspect-ratio when no height is declared -- exactly the trap the hero hit.
+   Without it these render 259x154 instead of square. */
 .treat-txt{padding:13px 15px 15px}
 .treat-txt b{display:block;font-size:.95rem;color:var(--ink);font-weight:600;margin-bottom:2px}
 .treat-txt span{font-size:.83rem;color:var(--body);display:block;line-height:1.4}
@@ -310,7 +316,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   .incl-wrap{grid-template-columns:1fr;gap:28px}
   /* Nine across becomes unreadable long before this width. Three up keeps the
      labels on one or two lines instead of breaking mid-word. */
-  .treat{grid-template-columns:repeat(3,1fr)}
+  .treat-item{flex:0 1 calc(33.333% - 11px)}
   .hero-grid{grid-template-columns:1fr;gap:34px}
   .steps,.whos{grid-template-columns:1fr}
   .compare{grid-template-columns:1fr}
@@ -322,7 +328,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   .hero{padding:40px 0 48px}
   .terms{grid-template-columns:1fr}
   .why{grid-template-columns:1fr}
-  .treat{grid-template-columns:repeat(2,1fr)}
+  .treat-item{flex:0 1 calc(50% - 8px)}
   .price{font-size:2.6rem}
   .cta-row .btn{width:100%}
   .trust-in{gap:16px 22px;font-size:.82rem}
@@ -460,10 +466,6 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       <a class="treat-item" href="#enrol" data-enrol>
         <img class="treat-img" src="img/cond/allergies.jpg" alt="" width="176" height="154" loading="lazy">
         <span class="treat-txt"><b>Allergies</b><span>Breathe easier</span></span>
-      </a>
-      <a class="treat-item" href="#enrol" data-enrol>
-        <img class="treat-img" src="img/cond/childrens.jpg" alt="" width="176" height="154" loading="lazy">
-        <span class="treat-txt"><b>Children's health</b><span>Care for every stage</span></span>
       </a>
       <a class="treat-item" href="#enrol" data-enrol>
         <img class="treat-img" src="img/cond/skin.jpg" alt="" width="176" height="154" loading="lazy">
