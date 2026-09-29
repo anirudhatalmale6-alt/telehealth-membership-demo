@@ -594,7 +594,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       <a href="#enrol" class="btn btn-primary" id="termCta" data-enrol>Continue with the recommended plan
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <p class="reassure">You will not be charged until you confirm on the next screen.</p>
+      <p class="reassure">Every plan renews automatically at the end of its term until you cancel. You will not be charged until you confirm on the next screen.</p>
     </div>
   </div>
 </section>
@@ -616,9 +616,10 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <p>For your primary care, yes. That is the point of the membership rather than a walk-in
            service. Urgent care at 2am will be whoever is on shift, which is how urgent care works
            everywhere.</p></details>
-      <details><summary>What if I want to cancel?</summary>
-        <p>Cancel any time from your account. Monthly members stop at the end of the current month.
-           Annual members can cancel and keep access for the rest of the term already paid for.</p></details>
+      <details><summary>Does it renew, and how do I cancel?</summary>
+        <p>Yes, it renews automatically at the end of whichever term you choose, and keeps renewing
+           until you cancel. You can cancel any time from your account. You keep access for the rest
+           of the term you have already paid for, and you are not charged again after that.</p></details>
       <details><summary>Is my family covered?</summary>
         <p>Not on this plan. There is a family membership that covers up to seven additional people
            on one subscription — ask us and we will send the details.</p></details>
@@ -749,10 +750,16 @@ var uniqueWinner = atLowest.length === 1;
 
 function renderHero(){
   document.getElementById('heroPrice').textContent  = money(perMonth(best));
+  /* The renewal wording is not optional dressing. Their checkout says "you
+     agree to start a recurring subscription", and "Billed $105 for 3 months"
+     on its own reads as a one-off purchase. A page that implies one-off and a
+     checkout that charges again in three months is how you collect chargebacks
+     and complaints, and auto-renewal is a regulated disclosure in the US. Say
+     it before the click, not after. */
   document.getElementById('heroBilled').textContent =
     (best.months === 1
-      ? 'Billed monthly.'
-      : 'Billed ' + money(best.total) + ' for ' + best.months + ' months.') +
+      ? 'Billed $' + perMonth(monthly).toFixed(0) + ' monthly, renewing until you cancel.'
+      : 'Billed ' + money(best.total) + ' every ' + best.months + ' months, renewing until you cancel.') +
     ' Month-to-month available at ' + money(perMonth(monthly)) + '.';
 
   /* The enrol button names the term it will actually send them to. */
@@ -782,7 +789,7 @@ function renderTerms(){
       '<div class="term-len">' + p.label + '</div>' +
       '<div class="term-pm">' + money(perMonth(p)) + '<span>/mo</span></div>' +
       '<div class="term-tot">' + (p.months === 1 ? 'billed monthly'
-          : money(p.total) + ' for ' + p.months + ' months') + '</div>';
+          : money(p.total) + ' every ' + p.months + ' months') + '</div>';
     d.setAttribute('data-term', p.months);
     d.style.cursor = 'pointer';
     d.addEventListener('click', function(){ go(p.months); });
