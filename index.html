@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Virtual Primary Care for $60/month — [Your Brand]</title>
+<title>Nuvantu Health — Virtual Primary Care for $60/month</title>
 <meta name="description" content="A dedicated doctor, 24/7 urgent care, dermatology and counselling included. $60 a month, no contract. Enrol online in minutes.">
 <meta name="robots" content="noindex,nofollow">
+<!-- noindex stays until this moves to nuvantuhealth.com; a demo URL ranking
+     for the brand would compete with the real site. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,500;600;700&display=swap" rel="stylesheet">
@@ -43,9 +45,11 @@ a{color:inherit}
         height:68px;max-width:1140px;margin:0 auto;padding:0 24px}
 .brand{display:flex;align-items:center;gap:10px;font-family:'Newsreader',serif;
        font-weight:700;font-size:1.22rem;color:var(--ink);text-decoration:none}
-.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--blue);color:#fff;
-            display:grid;place-items:center;font-size:.9rem;font-weight:700;
-            font-family:'Instrument Sans',sans-serif}
+/* Sized by height so the logo keeps its own proportions whatever its width.
+   The supplied artwork is a wide lockup, so a width-based rule would make it
+   tower over a 68px header bar. */
+.brand-logo{height:34px;width:auto;display:block}
+@media(max-width:560px){ .brand-logo{height:28px} }
 .hdr-right{display:flex;align-items:center;gap:18px}
 .hdr-help{font-size:.9rem;color:var(--body);text-decoration:none;font-weight:500}
 .hdr-help:hover{color:var(--blue)}
@@ -331,7 +335,9 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 
 <header class="hdr">
   <div class="hdr-in">
-    <a href="#top" class="brand"><span class="brand-mark">YB</span>[Your Brand]</a>
+    <a href="#top" class="brand" aria-label="Nuvantu Health home">
+      <img src="img/logo.png" alt="Nuvantu Health" width="760" height="145" class="brand-logo">
+    </a>
     <div class="hdr-right">
       <a href="#faq" class="hdr-help">Questions</a>
       <a href="#enrol" class="hdr-cta" data-enrol>Get started</a>
@@ -571,7 +577,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       </div>
       <div class="cmp win">
         <span class="cmp-tag">Membership</span>
-        <h3>With [Your Brand]</h3>
+        <h3>With Nuvantu Health</h3>
         <div class="cmp-row"><span>Urgent care visit &times; 2</span><b>Included</b></div>
         <div class="cmp-row"><span>Doctor visits, unlimited</span><b>Included</b></div>
         <div class="cmp-row"><span>Dermatology consult</span><b>Included</b></div>
@@ -643,7 +649,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
           <input type="email" id="qEmail" name="email" placeholder="Email (optional)" autocomplete="email">
           <button type="submit" class="btn btn-primary" id="qSubmit">Request a call back</button>
           <p class="ask-note" id="consentText">By submitting this form you agree to be contacted by
-             [Your Brand] at the number provided, including by automated dialling and text message.
+             Nuvantu Health at the number provided, including by automated dialling and text message.
              Consent is not a condition of purchase. Message and data rates may apply.</p>
         </form>
         <div class="ask-ok" id="askOk">
@@ -660,14 +666,14 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 <footer>
   <div class="wrap">
     <div class="f-top">
-      <span class="f-brand">[Your Brand]</span>
+      <span class="f-brand">Nuvantu Health</span>
       <nav class="f-links">
         <a href="#top">Home</a><a href="#faq">FAQ</a>
         <a href="privacy.html">Privacy</a><a href="terms.html">Terms</a>
       </nav>
     </div>
-    <p class="f-disc">[Your Brand] is a marketing and enrolment service. Medical care is delivered by
-       independent, licensed providers through our clinical partner. [Your Brand] does not practise
+    <p class="f-disc">Nuvantu Health is a marketing and enrolment service. Medical care is delivered by
+       independent, licensed providers through our clinical partner. Nuvantu Health does not practise
        medicine, does not provide medical advice, and does not guarantee any particular outcome.</p>
     <p class="f-disc">This membership is not health insurance and is not a substitute for it. It does
        not meet the minimum essential coverage requirements of the Affordable Care Act. Psychology and
@@ -675,7 +681,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
        treating provider; controlled substances are not prescribed.</p>
     <p class="f-disc">Figures shown in "what one year actually costs" are illustrative national
        averages for uninsured self-pay care, not quotes. Actual costs vary by location and provider.</p>
-    <p class="f-disc">&copy; 2026 [Your Brand]. All rights reserved.</p>
+    <p class="f-disc">&copy; 2026 Nuvantu Health. All rights reserved.</p>
   </div>
 </footer>
 
