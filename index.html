@@ -139,6 +139,12 @@ h1{font-size:clamp(2.1rem,4.4vw,3.15rem);margin-bottom:18px}
 
 /* the included list, now its own section rather than a card in the hero */
 .incl-wrap{display:grid;grid-template-columns:1fr 1.25fr;gap:44px;align-items:start}
+/* height:auto is required alongside aspect-ratio — the width/height attributes
+   on the img are presentational hints and would otherwise win, rendering it at
+   full natural height. Same trap as the hero. */
+.incl-img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:center 30%;
+          display:block;border-radius:16px;margin-top:26px;box-shadow:var(--shadow);
+          background:var(--blue-l)}
 .hero-card{background:#fff;border:1px solid var(--line);border-radius:22px;
            box-shadow:var(--shadow);padding:28px 26px 26px}
 .hero-card h3{font-size:1.12rem;margin-bottom:4px}
@@ -294,6 +300,10 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   .sec.has-scene{padding-bottom:68px}
   .hero{padding-bottom:48px}
   .why{grid-template-columns:repeat(2,1fr);gap:20px}
+  /* This one was missed when the included-list moved out of the hero: without
+     it the two columns stayed side by side and the photo rendered 139px wide
+     on a phone. */
+  .incl-wrap{grid-template-columns:1fr;gap:28px}
   /* Nine across becomes unreadable long before this width. Three up keeps the
      labels on one or two lines instead of breaking mid-word. */
   .treat{grid-template-columns:repeat(3,1fr)}
@@ -400,6 +410,12 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       <h2 style="font-size:1.6rem;margin-bottom:10px">One membership, everything in it</h2>
       <p style="font-size:.98rem">No per-visit charges on any of the below. You are not billed
          again for using it.</p>
+      <!-- This column was mostly empty, which is the same dead-space problem the
+           partner's own page has. The photograph fills it and puts a family in
+           front of the "what do I actually get" section. -->
+      <img class="incl-img" src="img/family-call.jpg"
+           alt="A mother and daughter waving at a doctor during a video visit at home"
+           width="811" height="695" loading="lazy">
     </div>
     <aside class="hero-card">
       <h3>Everything included</h3>
