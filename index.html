@@ -60,12 +60,46 @@ a{color:inherit}
 .hdr-cta:hover{background:var(--warm-d)}
 
 /* --------------------------------------------------------------------- hero */
+/* Bottom padding is deliberately large: it reserves a clear band for the
+   background scene to stand in. Fading artwork out from behind text is always
+   a compromise; giving it empty space of its own is not. */
 .hero{background:linear-gradient(168deg,var(--blue-l) 0%,var(--sky) 46%,#fff 100%);
-      border-bottom:1px solid var(--line);padding:58px 0 66px;position:relative;overflow:hidden}
+      border-bottom:1px solid var(--line);padding:58px 0 206px;position:relative;overflow:hidden}
 .hero::after{content:'';position:absolute;right:-140px;top:-120px;width:420px;height:420px;
              border-radius:50%;background:rgba(224,138,76,.09)}
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:52px;align-items:center;
-           position:relative;z-index:1}
+           position:relative;z-index:2}
+
+/* ------------------------------------------------------- background scenes
+   People standing along the bottom of a section, behind the content.
+
+   The hard part of a background like this is not drawing it, it is keeping the
+   text on top readable. On the crash-claim site I first laid an overlay so
+   heavy the photo underneath may as well not have been there, and the fix is
+   not "less overlay" -- it is keeping the artwork OUT of the area the text
+   occupies in the first place.
+
+   So: the scene is pinned to the BOTTOM of the section and capped in height,
+   the copy sits above it, and a vertical wash fades the artwork out as it
+   rises towards the text. On narrow screens the scene is dropped entirely
+   rather than shrunk, because at phone width the copy fills the whole box and
+   there is no clear space left to put people into. */
+.scene{position:absolute;left:0;right:0;bottom:0;height:min(36%,214px);
+       z-index:0;pointer-events:none;overflow:hidden}
+.scene svg{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+           width:1600px;max-width:none;height:100%;opacity:.62}
+.scene::after{content:'';position:absolute;inset:0;
+              background:linear-gradient(180deg,
+                 var(--wash-a) 0%, var(--wash-b) 34%, var(--wash-c) 78%)}
+/* All three stops are set per section. An earlier version hard-coded the two
+   lower stops to the blue wash, which tinted the cream section's fade the
+   wrong colour and left a visible seam.
+
+   The wash is light because no copy sits over this band any more — its job is
+   only to blend the top edge of the artwork into the section, not to rescue
+   text. A heavy wash here just bleaches the figures' heads. */
+.hero .scene{--wash-a:rgba(233,243,252,.70);--wash-b:rgba(233,243,252,.16);--wash-c:rgba(233,243,252,0)}
+.scene-cream{--wash-a:rgba(253,247,241,.72);--wash-b:rgba(253,247,241,.18);--wash-c:rgba(253,247,241,0)}
 .eyebrow{display:inline-flex;align-items:center;gap:7px;background:#fff;
          color:var(--blue-d);font-size:.76rem;font-weight:700;letter-spacing:.07em;
          text-transform:uppercase;padding:.44rem .85rem;border-radius:100px;margin-bottom:20px;
@@ -124,6 +158,10 @@ h1{font-size:clamp(2.1rem,4.4vw,3.15rem);margin-bottom:18px}
 .trust-in svg{width:16px;height:16px;stroke:var(--blue);stroke-width:2;fill:none}
 
 .sec{padding:68px 0}
+/* Any section carrying a background scene reserves room for it underneath the
+   content. Without this the cards sit across the figures and all you see below
+   them is a row of disembodied legs. */
+.sec.has-scene{padding-bottom:230px}
 .sec-sky{background:var(--sky);border-block:1px solid var(--line)}
 .sec-cream{background:var(--cream);border-block:1px solid #F0E4D6}
 .sec-head{text-align:center;max-width:44rem;margin:0 auto 42px}
@@ -224,6 +262,14 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 
 /* ------------------------------------------------------------------ mobile */
 @media(max-width:940px){
+  /* At phone width the copy fills the section, so there is no clear band left
+     for the scene to live in. Hidden outright rather than squashed behind the
+     text, which is where these backgrounds normally turn into mud. The space
+     reserved for it has to collapse with it, or the page ends up with a large
+     empty gap where the people used to be. */
+  .scene{display:none}
+  .sec.has-scene{padding-bottom:68px}
+  .hero{padding-bottom:48px}
   .hero-grid{grid-template-columns:1fr;gap:34px}
   .steps,.whos{grid-template-columns:1fr}
   .compare{grid-template-columns:1fr}
@@ -297,6 +343,97 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
     <circle cx="95" cy="88" r="11" fill="#E8B48C"/>
     <path d="M84 86a11 11 0 0 1 22 0c0-5-5-8-11-8s-11 3-11 8z" fill="#4A3226"/>
   </symbol>
+  <!-- Background scene: a row of people and families standing on a baseline.
+       Drawn low-contrast on purpose — this sits BEHIND copy, so it has to read
+       as texture at a glance rather than compete for attention. Baseline y=260,
+       adults about 185 tall, children scaled to roughly two thirds. -->
+  <symbol id="scene-people" viewBox="0 0 1600 260" preserveAspectRatio="xMidYMax slice">
+    <!-- lone adult, far left -->
+    <g transform="translate(120,0)">
+      <rect x="-24" y="172" width="20" height="88" rx="9" fill="#5E7E9B"/>
+      <rect x="4" y="172" width="20" height="88" rx="9" fill="#5E7E9B"/>
+      <path d="M-26 120c0-10 12-16 26-16s26 6 26 16v54h-52z" fill="#8FBFE4"/>
+      <rect x="-36" y="122" width="12" height="52" rx="6" fill="#8FBFE4"/>
+      <rect x="24" y="122" width="12" height="52" rx="6" fill="#8FBFE4"/>
+      <circle cx="0" cy="92" r="18" fill="#E5B58A"/>
+      <path d="M-18 90a18 18 0 0 1 36 0c0-8-8-12-18-12s-18 4-18 12z" fill="#4A3628"/>
+    </g>
+    <!-- couple -->
+    <g transform="translate(330,0)">
+      <rect x="-24" y="174" width="20" height="86" rx="9" fill="#6B6E86"/>
+      <rect x="4" y="174" width="20" height="86" rx="9" fill="#6B6E86"/>
+      <path d="M-25 122c0-10 11-16 25-16s25 6 25 16v54h-50z" fill="#C9A9CF"/>
+      <rect x="-35" y="124" width="11" height="50" rx="5.5" fill="#C9A9CF"/>
+      <circle cx="0" cy="94" r="17" fill="#D99C6A"/>
+      <path d="M-17 92a17 17 0 0 1 34 0c0-8-7-12-17-12s-17 4-17 12z" fill="#2E2018"/>
+    </g>
+    <g transform="translate(408,0)">
+      <rect x="-22" y="176" width="19" height="84" rx="9" fill="#5E7E9B"/>
+      <rect x="3" y="176" width="19" height="84" rx="9" fill="#5E7E9B"/>
+      <path d="M-24 124c0-9 11-15 24-15s24 6 24 15v54h-48z" fill="#7FB3DC"/>
+      <rect x="22" y="126" width="11" height="48" rx="5.5" fill="#7FB3DC"/>
+      <circle cx="0" cy="97" r="17" fill="#F0C9A8"/>
+      <path d="M-17 95a17 17 0 0 1 34 0c0-8-7-12-17-12s-17 4-17 12z" fill="#8A7A6B"/>
+    </g>
+
+    <!-- family: adult and child, hand in hand -->
+    <g transform="translate(640,0)">
+      <rect x="-24" y="172" width="20" height="88" rx="9" fill="#6B5B4E"/>
+      <rect x="4" y="172" width="20" height="88" rx="9" fill="#6B5B4E"/>
+      <path d="M-26 120c0-10 12-16 26-16s26 6 26 16v54h-52z" fill="#E0A878"/>
+      <rect x="-36" y="122" width="12" height="52" rx="6" fill="#E0A878"/>
+      <path d="M26 126c10 6 18 14 22 24" stroke="#E0A878" stroke-width="12" stroke-linecap="round" fill="none"/>
+      <circle cx="0" cy="92" r="18" fill="#B9825A"/>
+      <path d="M-18 90a18 18 0 0 1 36 0c0-8-8-12-18-12s-18 4-18 12z" fill="#241A14"/>
+    </g>
+    <g transform="translate(706,0)">
+      <rect x="-15" y="206" width="13" height="54" rx="6" fill="#5E7E9B"/>
+      <rect x="2" y="206" width="13" height="54" rx="6" fill="#5E7E9B"/>
+      <path d="M-17 172c0-7 8-11 17-11s17 4 17 11v36h-34z" fill="#9FD0F2"/>
+      <path d="M-18 176c-8 -4 -13 -10 -15 -18" stroke="#9FD0F2" stroke-width="9" stroke-linecap="round" fill="none"/>
+      <circle cx="0" cy="152" r="13" fill="#E8B48C"/>
+      <path d="M-13 150a13 13 0 0 1 26 0c0-6-6-9-13-9s-13 3-13 9z" fill="#3E2C24"/>
+    </g>
+
+    <!-- older person with a stick -->
+    <g transform="translate(940,0)">
+      <rect x="-23" y="176" width="19" height="84" rx="9" fill="#77808C"/>
+      <rect x="4" y="176" width="19" height="84" rx="9" fill="#77808C"/>
+      <path d="M-25 124c0-10 11-16 25-16s25 6 25 16v54h-50z" fill="#C8DCEA"/>
+      <rect x="-35" y="126" width="11" height="50" rx="5.5" fill="#C8DCEA"/>
+      <path d="M30 132v126" stroke="#9A7B5C" stroke-width="6" stroke-linecap="round"/>
+      <rect x="22" y="126" width="11" height="26" rx="5.5" fill="#C8DCEA"/>
+      <circle cx="0" cy="96" r="17" fill="#F0C9A8"/>
+      <path d="M-17 94a17 17 0 0 1 34 0c0-8-7-12-17-12s-17 4-17 12z" fill="#C9CDD2"/>
+    </g>
+
+    <!-- adult carrying a small child -->
+    <g transform="translate(1180,0)">
+      <rect x="-24" y="172" width="20" height="88" rx="9" fill="#5B6F8A"/>
+      <rect x="4" y="172" width="20" height="88" rx="9" fill="#5B6F8A"/>
+      <path d="M-26 120c0-10 12-16 26-16s26 6 26 16v54h-52z" fill="#A8CCE8"/>
+      <circle cx="0" cy="92" r="18" fill="#C98A5E"/>
+      <path d="M-18 90a18 18 0 0 1 36 0c0-8-8-12-18-12s-18 4-18 12z" fill="#2B1D16"/>
+      <g transform="translate(34,26)">
+        <path d="M-14 112c0-7 6-11 14-11s14 4 14 11v30h-28z" fill="#E5B58A"/>
+        <circle cx="0" cy="92" r="13" fill="#E8B48C"/>
+        <path d="M-13 90a13 13 0 0 1 26 0c0-6-6-9-13-9s-13 3-13 9z" fill="#4A3226"/>
+      </g>
+      <path d="M-26 128c6 14 18 22 34 22" stroke="#A8CCE8" stroke-width="12" stroke-linecap="round" fill="none"/>
+    </g>
+
+    <!-- lone adult, far right -->
+    <g transform="translate(1440,0)">
+      <rect x="-23" y="174" width="19" height="86" rx="9" fill="#6B6E86"/>
+      <rect x="4" y="174" width="19" height="86" rx="9" fill="#6B6E86"/>
+      <path d="M-25 122c0-10 11-16 25-16s25 6 25 16v54h-50z" fill="#B8D7EE"/>
+      <rect x="-35" y="124" width="11" height="50" rx="5.5" fill="#B8D7EE"/>
+      <rect x="24" y="124" width="11" height="50" rx="5.5" fill="#B8D7EE"/>
+      <circle cx="0" cy="94" r="17" fill="#8D5A3B"/>
+      <path d="M-17 92a17 17 0 0 1 34 0c0-8-7-12-17-12s-17 4-17 12z" fill="#17100C"/>
+    </g>
+  </symbol>
+
   <symbol id="fig-night" viewBox="0 0 120 120">
     <circle cx="60" cy="60" r="60" fill="#1E5F96"/>
     <circle cx="94" cy="26" r="8" fill="#F6D08A"/>
@@ -322,6 +459,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 
 <!-- ============================================================== hero -->
 <section class="hero">
+  <div class="scene" aria-hidden="true"><svg viewBox="0 0 1600 260" preserveAspectRatio="xMidYMax slice"><use href="#scene-people"/></svg></div>
   <div class="wrap hero-grid">
     <div>
       <span class="eyebrow"><span class="dot"></span>Accepting new patients nationwide</span>
@@ -422,8 +560,9 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 </section>
 
 <!-- ========================================================= who it's for -->
-<section class="sec sec-cream">
-  <div class="wrap">
+<section class="sec sec-cream has-scene" style="position:relative;overflow:hidden">
+  <div class="scene scene-cream" aria-hidden="true"><svg viewBox="0 0 1600 260" preserveAspectRatio="xMidYMax slice"><use href="#scene-people"/></svg></div>
+  <div class="wrap" style="position:relative;z-index:2">
     <div class="sec-head">
       <h2>Who it tends to suit</h2>
       <p>Membership care works best for people who need a doctor more than once a year.</p>
