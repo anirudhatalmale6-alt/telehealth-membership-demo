@@ -702,8 +702,15 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 
    No API token goes anywhere near this file. Their API token reads leads,
    orders and payouts; it is a secret, and anything in a web page is public. */
-var ENROL_BASE = '';          /* e.g. https://<their-care-services-host>/start?partner_id=XXXXXXXX */
-var ENROL_SERVICE = 'primary-care';   /* primary-care | urgent-care | mental-health | dermatology | veterinary-care */
+var ENROL_BASE = 'https://care.nationaltelehealthproviders.com/primary?partner_id=3SS1PBNZ';
+/* Copied from the partner portal (Partner Links > Care Services). The
+   partner_id on it is what credits the sale, so it is the one value on this
+   page that must never be guessed, templated, or copied from documentation. */
+/* Left empty deliberately. The link already ends in /primary, so the service is
+   chosen by the path; adding service=primary-care on top would be a second,
+   redundant instruction and there is no upside to sending one. Set it only if
+   the base link is ever swapped for a generic catalogue URL. */
+var ENROL_SERVICE = '';   /* primary-care | urgent-care | mental-health | dermatology | veterinary-care */
 
 var LEAD_URL   = '';          /* Apps Script endpoint, same pattern as crashclaimreview */
 var LEAD_SECRET= '';
@@ -793,9 +800,10 @@ function renderTerms(){
 function enrolUrl(term){
   if (!ENROL_BASE) return null;
   var sep = ENROL_BASE.indexOf('?') === -1 ? '?' : '&';
-  var m = String(term || best.months);
-  return ENROL_BASE + sep + 'service=' + encodeURIComponent(ENROL_SERVICE) +
-         '&m=' + encodeURIComponent(m);
+  var qs  = [];
+  if (ENROL_SERVICE) qs.push('service=' + encodeURIComponent(ENROL_SERVICE));
+  qs.push('m=' + encodeURIComponent(String(term || best.months)));
+  return ENROL_BASE + sep + qs.join('&');
 }
 
 function go(term){
