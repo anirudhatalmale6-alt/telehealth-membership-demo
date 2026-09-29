@@ -686,7 +686,25 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
    ENROL_URL is the hand-over to the clinical partner. Whichever way they do it
    -- affiliate link, co-branded page, embedded widget -- it is swapped here and
    nowhere else, and {term} is replaced with the term the visitor picked.      */
-var ENROL_URL  = 'https://serenityspa.telehealthwebsite.com/care-services/primary-care?term={term}';
+/* The hand-over to LegUpRx.
+
+   ENROL_BASE must be pasted from the partner portal: Partner Links > Care
+   Services > "Copy URL". It already carries the partner_id, which is how the
+   sale gets attributed.
+
+   It is deliberately EMPTY rather than pre-filled. Every URL in the LegUpRx
+   documentation carries the docs' own sample partner code and sample host.
+   Pasting one of those in just to have something would attribute real,
+   paid-for signups to another account, and nothing on the page would explain
+   why the payout numbers never added up. The docs say it plainly: do not
+   build this URL from the documentation. Neither sample value is repeated in
+   this file, so neither can be copied out of it by mistake.
+
+   No API token goes anywhere near this file. Their API token reads leads,
+   orders and payouts; it is a secret, and anything in a web page is public. */
+var ENROL_BASE = '';          /* e.g. https://<their-care-services-host>/start?partner_id=XXXXXXXX */
+var ENROL_SERVICE = 'primary-care';   /* primary-care | urgent-care | mental-health | dermatology | veterinary-care */
+
 var LEAD_URL   = '';          /* Apps Script endpoint, same pattern as crashclaimreview */
 var LEAD_SECRET= '';
 
@@ -765,8 +783,30 @@ function renderTerms(){
   });
 }
 
+/* Builds the hand-over URL. `m` preselects the term on their intake, so the
+   visitor lands on the one they clicked rather than starting again.
+
+   The base URL already has a query string on it (partner_id), so the extra
+   parameters join with & -- appending '?' a second time would silently break
+   attribution, which is the kind of fault that only shows up in a payout
+   report weeks later. */
+function enrolUrl(term){
+  if (!ENROL_BASE) return null;
+  var sep = ENROL_BASE.indexOf('?') === -1 ? '?' : '&';
+  var m = String(term || best.months);
+  return ENROL_BASE + sep + 'service=' + encodeURIComponent(ENROL_SERVICE) +
+         '&m=' + encodeURIComponent(m);
+}
+
 function go(term){
-  window.open(ENROL_URL.replace('{term}', term || best.months), '_blank', 'noopener');
+  var url = enrolUrl(term);
+  if (!url) {                       /* demo mode: no link configured yet */
+    alert('Enrolment link not connected yet.\n\nThis is the demo. Once the ' +
+          'Care Services URL is in, this button takes you straight to signup ' +
+          'with the ' + (term || best.months) + '-month term already selected.');
+    return;
+  }
+  window.open(url, '_blank', 'noopener');
 }
 Array.prototype.forEach.call(document.querySelectorAll('[data-enrol]'), function(a){
   a.addEventListener('click', function(e){ e.preventDefault(); go(best.months); });
