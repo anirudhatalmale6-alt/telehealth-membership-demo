@@ -3,6 +3,17 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google tag (gtag.js) - Google Ads account AW-18540604219, supplied by the client.
+     It has to live here rather than on the enrolment page: that page belongs to
+     National Telehealth Providers and they will not host third-party tags. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18540604219"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18540604219');
+</script>
 <title>Nuvantu Health — Virtual Primary Care for $60/month</title>
 <meta name="description" content="A dedicated doctor, 24/7 urgent care, dermatology and counselling included. $60 a month, no contract. Enrol online in minutes.">
 <meta name="robots" content="noindex,nofollow">
@@ -844,7 +855,34 @@ function enrolUrl(term){
   var qs  = [];
   if (ENROL_SERVICE) qs.push('service=' + encodeURIComponent(ENROL_SERVICE));
   qs.push('m=' + encodeURIComponent(String(term || best.months)));
+  var sub = campaignSub();
+  if (sub) qs.push('sub=' + sub);
   return ENROL_BASE + sep + qs.join('&');
+}
+
+/* Campaign attribution. National Telehealth tags each order with the `sub`
+   number on the link it came through, and that is the only way to see which
+   campaign produced a sale (their checkout cannot carry an ad pixel). So the ad
+   points at nuvantuhealth.com/?sub=5 and the page forwards that number to the
+   enrolment link. Only 1-250 is forwarded, because that is all their link
+   accepts; anything else is dropped rather than sent through malformed. */
+function campaignSub(){
+  var m = /[?&]sub=(\d{1,3})(?:&|$)/.exec(location.search);
+  if (!m) return '';
+  var n = parseInt(m[1], 10);
+  return (n >= 1 && n <= 250) ? String(n) : '';
+}
+
+/* Google Ads conversion for the click through to enrol. The tag above counts
+   visits on its own; counting this click as a conversion needs the conversion
+   LABEL from Google Ads (Goals > Conversions > the action > Tag setup), which
+   looks like AW-18540604219/AbC123xYz. Until it is filled in, nothing is sent,
+   so Google never records a conversion against an action that does not exist. */
+var GADS_SEND_TO = '';
+
+function reportEnrolClick(){
+  if (!GADS_SEND_TO || typeof gtag !== 'function') return;
+  gtag('event', 'conversion', { send_to: GADS_SEND_TO });
 }
 
 function go(term){
@@ -855,6 +893,7 @@ function go(term){
           'with the ' + (term || best.months) + '-month term already selected.');
     return;
   }
+  reportEnrolClick();
   window.open(url, '_blank', 'noopener');
 }
 Array.prototype.forEach.call(document.querySelectorAll('[data-enrol]'), function(a){
