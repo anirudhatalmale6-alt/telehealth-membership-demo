@@ -792,22 +792,26 @@ var ENROL_SERVICE = '';   /* primary-care | urgent-care | mental-health | dermat
 /* The single-service plans. Same host and the same partner_id as ENROL_BASE;
    only the path changes, and each path was opened to confirm it shows the
    Nuvantu-branded National Telehealth checkout for that plan. Prices are the
-   monthly prices that checkout showed on 17 Nov 2026. If they ever change
+   monthly prices that checkout showed on 17 Nov 2026. The paths match the
+   links the client copied from the partner portal (Partner Links > Care Services). If they ever change
    there, change them here. */
 var CARE_HOST  = 'https://care.nationaltelehealthproviders.com/';
 var PARTNER_QS = '?partner_id=3SS1PBNZ';
 var SERVICES = [
-  {path:'primary', name:'Primary Care', price:null, img:'img/family-call.jpg', main:true,
+  {path:'primary', name:'Primary Care', short:'Primary Care', price:null, img:'img/family-call.jpg', main:true,
    blurb:'Your own provider, plus 24/7 urgent care, dermatology and counselling, all in one membership.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
-  {path:'urgent-care', name:'Urgent Care', price:28, img:'img/svc/urgent.jpg',
-   blurb:'24/7/365 on-demand access to licensed providers for common illnesses, with medication when appropriate.'},
-  {path:'behavior', name:'Behavioral Health', price:21, img:'img/svc/behavioral.jpg',
-   blurb:'24/7 crisis support and counselling at no extra cost, psychiatry by appointment, and 1,000+ medications at no cost if needed.',
+  {path:'urgent-care', name:'Urgent Care', short:'Urgent Care', price:28, img:'img/svc/urgent.jpg',
+   blurb:'Get 24/7 access to licensed providers for fast treatment of common illnesses, with prescriptions sent to your preferred pharmacy for pickup if prescribed.'},
+  {path:'urgent-plus', name:'Urgent Care + Prescription Discount Program', short:'Urgent Care + Rx', price:35, img:'img/svc/urgent-plus.jpg',
+   blurb:'Access 24/7 urgent care for hundreds of common conditions, with prescriptions sent to your pharmacy of choice and many medications available for free or less if prescribed.'},
+  {path:'behavior', name:'Behavioral Health + Prescription Discount Program', short:'Behavioral Health', price:21, img:'img/svc/behavioral.jpg',
+   blurb:'Connect with licensed mental health providers for scheduled therapy and psychiatry visits, with prescriptions sent to your preferred pharmacy if prescribed and many medications available for free.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
-  {path:'dermatology', name:'Dermatology', price:35, img:'img/svc/dermatology.jpg',
-   blurb:'Photo-based consults for acne, eczema, rashes, hair loss and more. A board-certified provider replies within 24 hours.'},
-  {path:'vet-care', name:'Vet Care', price:21, img:'img/svc/vet.jpg',
+  {path:'dermatology', name:'Dermatology', short:'Dermatology', price:35, img:'img/svc/dermatology.jpg',
+   blurb:'Schedule a dermatology consultation, describe the problem and upload photos. A licensed dermatologist reviews them, makes a diagnosis and gives you a treatment plan.',
+   note:'Also included in Primary Care.'},
+  {path:'vet-care', name:'Vet Care', short:'Vet Care', price:21, img:'img/svc/vet.jpg',
    blurb:"Talk to a licensed veterinarian 24/7 for advice about your pet's care.",
    note:'Advice only: no diagnosis, treatment plans or prescriptions. Not for emergencies.'}
 ];
@@ -1032,7 +1036,7 @@ function renderServices(){
       '<div class="svc-price">' + money(price) + ' <span>per month</span></div>' +
       '<p>' + esc(s.blurb) + '</p>' +
       (s.note ? '<p class="svc-note">' + esc(s.note) + '</p>' : '') +
-      '<a href="#enrol" class="btn ' + (s.main ? 'btn-primary' : 'btn-ghost') + '">Start ' + esc(s.name) + '</a></div>';
+      '<a href="#enrol" class="btn ' + (s.main ? 'btn-primary' : 'btn-ghost') + '">Start ' + esc(s.short) + '</a></div>';
     card.querySelector('.btn').addEventListener('click', function(e){ e.preventDefault(); go(1, base); });
     grid.appendChild(card);
   });
