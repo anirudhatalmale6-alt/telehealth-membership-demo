@@ -14,8 +14,8 @@
 
   gtag('config', 'AW-18540604219');
 </script>
-<title>Nuvantu Health — Virtual Primary Care for $60/month</title>
-<meta name="description" content="Virtual Primary Care for $60 a month with urgent care, dermatology and counselling included, or single-service plans for urgent care, behavioral health, dermatology and vet care from $21 a month.">
+<title>Nuvantu Health — Virtual Primary Care from $40/month</title>
+<meta name="description" content="Virtual Primary Care from $40 a month with urgent care, dermatology and counselling included, or single-service plans for urgent care, behavioral health, dermatology and vet care from $21 a month.">
 <meta name="robots" content="noindex,nofollow">
 <!-- noindex stays until this moves to nuvantuhealth.com; a demo URL ranking
      for the brand would compete with the real site. -->
@@ -645,7 +645,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <div class="cmp-row"><span>Doctor visits, unlimited</span><b>Included</b></div>
         <div class="cmp-row"><span>Dermatology consult</span><b>Included</b></div>
         <div class="cmp-row"><span>Counselling session &times; 2</span><b>Included</b></div>
-        <div class="cmp-total"><span>Total for the year on a 3, 6 or 12-month plan</span><span id="cmpYear">$420</span></div>
+        <div class="cmp-total"><span>Total for the year on the 12-month plan</span><span id="cmpYear">$450</span></div>
       </div>
     </div>
   </div>
@@ -798,17 +798,18 @@ var ENROL_SERVICE = '';   /* primary-care | urgent-care | mental-health | dermat
 /* The single-service plans. Same host and the same partner_id as ENROL_BASE;
    only the path changes, and each path was opened to confirm it shows the
    Nuvantu-branded National Telehealth checkout for that plan. Prices are the
-   prices that checkout showed on 17 Nov 2026 for each plan length
+   prices that checkout showed on 17 Nov 2026 (Primary Care and Primary Care + Rx
+   re-read after the client changed them that day) for each plan length
    (1, 3, 6 and 12 months; the figure is the TOTAL charged for that length). The paths match the
    links the client copied from the partner portal (Partner Links > Care Services). If they ever change
    there, change them here. */
 var CARE_HOST  = 'https://care.nationaltelehealthproviders.com/';
 var PARTNER_QS = '?partner_id=3SS1PBNZ';
 var SERVICES = [
-  {path:'primary', name:'Primary Care', short:'Primary Care', terms:{1:60, 3:105, 6:210, 12:420}, img:'img/family-call.jpg', main:true,
+  {path:'primary', name:'Primary Care', short:'Primary Care', terms:{1:40, 3:135, 6:230, 12:450}, img:'img/family-call.jpg', main:true,
    blurb:'Your own provider, plus 24/7 urgent care, dermatology and counselling, all in one membership.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
-  {path:'primary-plus', name:'Primary Care + Prescription Discount Program', short:'Primary Care + Rx', terms:{1:42, 3:126, 6:252, 12:504}, img:'img/svc/primary-plus.jpg',
+  {path:'primary-plus', name:'Primary Care + Prescription Discount Program', short:'Primary Care + Rx', terms:{1:50, 3:145, 6:280, 12:570}, img:'img/svc/primary-plus.jpg',
    blurb:'Choose a dedicated provider to manage your ongoing health, with prescriptions sent to your preferred pharmacy if prescribed and many medications available for free. Includes 24/7 urgent care, dermatology, care navigation, counseling, 24/7 crisis management and messaging with specialists at no additional charge.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
   {path:'primary-family-plan', name:'Primary Care Family Plan', short:'Family Plan', terms:{1:105, 3:315, 6:630, 12:1260}, img:'img/svc/family.jpg', unit:'per month for the family',
@@ -871,7 +872,11 @@ function renderHero(){
   /* The hero carries no price any more (client's request, 17 Nov 2026); the
      plan cards show every price. Only the year-cost figure is filled in here. */
   var yr = document.getElementById('cmpYear');
-  if (yr) yr.textContent = money(perMonth(best) * 12);
+  /* What a year actually costs on the 12-month Primary Care plan. Not
+     "cheapest per month x 12": when the per-month price differs by length,
+     that product is not a price anyone can pay. */
+  var year = PLANS.filter(function(p){ return p.months === 12; })[0];
+  if (yr && year) yr.textContent = money(year.total);
 }
 
 function renderTerms(){
