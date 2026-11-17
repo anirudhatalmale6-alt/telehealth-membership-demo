@@ -350,6 +350,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 /* ------------------------------------------------------------ care plans
    One card per National Telehealth service. Prices and links come from
    SERVICES in the script, so the cards and the checkout cannot disagree. */
+#plans{scroll-margin-top:72px}
 .svc{display:flex;flex-wrap:wrap;gap:22px;justify-content:center}
 .svc-card{flex:0 1 calc(33.333% - 15px);background:#fff;border:1px solid var(--line);
   border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;position:relative;
@@ -416,7 +417,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       <p class="billed" id="heroBilled">Billed $60 monthly, renewing until you cancel.</p>
 
       <div class="cta-row">
-        <a href="#enrol" class="btn btn-primary" data-enrol>Start my membership
+        <a href="#plans" class="btn btn-primary" data-enrol>Choose my plan
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
         <a href="#ask" class="btn btn-ghost">I have a question first</a>
@@ -469,12 +470,12 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:34px">
       <h2>Choose the care you need</h2>
-      <p>All-in-one Primary Care, or a single service on its own. Pay monthly, or choose 3, 6 or 12 months. Every plan renews until you cancel.</p>
+      <p>All-in-one Primary Care for you or your whole family, or a single service on its own. Pay monthly, or choose 3, 6 or 12 months. Every plan renews until you cancel.</p>
     </div>
     <div class="svc" id="svcGrid"></div>
-    <p class="svc-foot">Each plan is a separate membership that renews at the end of the length you pick until you cancel. Primary Care
-       already includes urgent care, dermatology and counselling, so there is no need to add those
-       on top of it.</p>
+    <p class="svc-foot">Each plan is a separate membership that renews at the end of the length you pick until you cancel. The Primary Care
+       and Family plans already include urgent care, dermatology and counselling, so there is no need
+       to add those on top.</p>
   </div>
 </section>
 
@@ -701,8 +702,9 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
            It is advice only: the vet cannot diagnose, create treatment plans or prescribe. It is not
            for emergencies. If your pet is in danger, go to an emergency vet straight away.</p></details>
       <details><summary>Is my family covered?</summary>
-        <p>Not on this plan. There is a family membership that covers up to seven additional people
-           on one subscription — ask us and we will send the details.</p></details>
+        <p>Yes, with a Family Plan. It covers you plus up to seven family members (up to 8 people) on one
+           membership. Adults 18 and over get their own secure patient portal, and children are linked to
+           the primary member's account. The individual plans cover one person.</p></details>
     </div>
   </div>
 </section>
@@ -810,6 +812,15 @@ var SERVICES = [
   {path:'primary', name:'Primary Care', short:'Primary Care', terms:{1:60, 3:105, 6:210, 12:420}, img:'img/family-call.jpg', main:true,
    blurb:'Your own provider, plus 24/7 urgent care, dermatology and counselling, all in one membership.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
+  {path:'primary-plus', name:'Primary Care + Prescription Discount Program', short:'Primary Care + Rx', terms:{1:42, 3:126, 6:252, 12:504}, img:'img/svc/primary-plus.jpg',
+   blurb:'Choose a dedicated provider to manage your ongoing health, with prescriptions sent to your preferred pharmacy if prescribed and many medications available for free. Includes 24/7 urgent care, dermatology, care navigation, counseling, 24/7 crisis management and messaging with specialists at no additional charge.',
+   note:'Psychology and psychiatry visits from $150 per visit.'},
+  {path:'primary-family-plan', name:'Primary Care Family Plan', short:'Family Plan', terms:{1:105, 3:315, 6:630, 12:1260}, img:'img/svc/family.jpg', unit:'per month for the family',
+   blurb:"All the benefits of the individual membership, plus up to seven additional family members at no extra cost. Adults 18+ get their own secure patient portal; children are linked to the primary member's account. Virtual primary care, 24/7 urgent care, mental health, dermatology, annual wellness labs and care navigation in one membership.",
+   note:'Covers up to 8 people.'},
+  {path:'primary-family-plan-and-discount-program', name:'Primary Care Family Plan + Prescription Discount Program', short:'Family Plan + Rx', terms:{1:119, 3:357, 6:714, 12:1428}, img:'img/svc/family-plus.jpg', unit:'per month for the family',
+   blurb:"Everything in the Family Plan, plus prescription savings: the primary member and up to seven family members get virtual primary care, 24/7 urgent care, mental health, dermatology, annual wellness labs, care navigation and many medications available for free.",
+   note:'Covers up to 8 people.'},
   {path:'urgent-care', name:'Urgent Care', short:'Urgent Care', terms:{1:28, 3:84, 6:168, 12:336}, img:'img/svc/urgent.jpg',
    blurb:'Get 24/7 access to licensed providers for fast treatment of common illnesses, with prescriptions sent to your preferred pharmacy for pickup if prescribed.'},
   {path:'urgent-plus', name:'Urgent Care + Prescription Discount Program', short:'Urgent Care + Rx', terms:{1:35, 3:105, 6:210, 12:420}, img:'img/svc/urgent-plus.jpg',
@@ -839,7 +850,9 @@ var PLANS = [1, 3, 6, 12].map(function(m){
    shows "$420" as the headline, which is the biggest number on screen for what
    is actually the cheapest way to buy. */
 function perMonth(p){ return p.total / p.months; }
-function money(n){ return '$' + (n % 1 === 0 ? n.toFixed(0) : n.toFixed(2)); }
+function money(n){
+  return '$' + n.toLocaleString('en-US', {minimumFractionDigits: n % 1 === 0 ? 0 : 2, maximumFractionDigits: 2});
+}
 
 var monthly = PLANS[0];
 
@@ -959,8 +972,15 @@ function go(term, base){
   reportEnrolClick();
   window.open(url, '_blank', 'noopener');
 }
+/* "Get started" and the other general buttons open the plan list, so every
+   visitor sees all the plans, not only Primary Care. Each plan card has its
+   own Start button that goes to that plan's checkout. */
 Array.prototype.forEach.call(document.querySelectorAll('[data-enrol]'), function(a){
-  a.addEventListener('click', function(e){ e.preventDefault(); go(best.months); });
+  a.setAttribute('href', '#plans');
+  a.addEventListener('click', function(e){
+    e.preventDefault();
+    document.getElementById('plans').scrollIntoView({behavior: 'smooth', block: 'start'});
+  });
 });
 
 /* ------------------------------------------------------------- lead capture
@@ -1026,7 +1046,7 @@ function renderServices(){
       '<a href="#enrol" class="btn ' + (s.main ? 'btn-primary' : 'btn-ghost') + '">Start ' + esc(s.short) + '</a></div>';
     var show = function(){
       var total = s.terms[term], pm = total / term, save = Math.round((1 - pm / s.terms[1]) * 100);
-      card.querySelector('.svc-price').innerHTML = money(pm) + ' <span>per month</span>' +
+      card.querySelector('.svc-price').innerHTML = money(pm) + ' <span>' + (s.unit || 'per month') + '</span>' +
         (save > 0 ? ' <em class="svc-save">Save ' + save + '%</em>' : '');
       card.querySelector('.svc-billed').textContent = term === 1
         ? 'Billed ' + money(total) + ' monthly, renews until you cancel'
