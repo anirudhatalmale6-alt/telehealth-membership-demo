@@ -409,12 +409,8 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       <p class="hero-sub">Your own primary care provider, plus <b>24/7 urgent care, dermatology,
          counselling and care navigation</b> — all included, no visit fees, no insurance needed.</p>
 
-      <div class="pricebox">
-        <span class="price" id="heroPrice">$60</span>
-        <span class="per">per month</span>
-        <span class="save" id="heroSave" style="display:none"></span>
-      </div>
-      <p class="billed" id="heroBilled">Billed $60 monthly, renewing until you cancel.</p>
+      <!-- Price block removed from the hero at the client's request (17 Nov 2026);
+           prices are shown on each plan card instead. -->
 
       <div class="cta-row">
         <a href="#plans" class="btn btn-primary" data-enrol>Choose my plan
@@ -872,19 +868,11 @@ var best     = atLowest[0];                      /* shortest term at the best ra
 var uniqueWinner = atLowest.length === 1;
 
 function renderHero(){
-  /* The client's headline is the monthly price. The longer terms are offered
-     underneath as the cheaper option, never instead of it. */
-  document.getElementById('heroPrice').textContent  = money(perMonth(monthly));
-  var longer = PLANS.filter(function(p){ return p.months > 1 && perMonth(p) < perMonth(monthly); });
-  document.getElementById('heroBilled').textContent =
-    'Billed ' + money(perMonth(monthly)) + ' monthly, renewing until you cancel.' +
-    (longer.length ? ' Or ' + money(lowestPM) + '/month when you choose ' +
-       joinOr(longer.map(function(p){ return p.months; })) + ' months.' : '');
-  document.getElementById('heroSave').style.display = 'none';
+  /* The hero carries no price any more (client's request, 17 Nov 2026); the
+     plan cards show every price. Only the year-cost figure is filled in here. */
   var yr = document.getElementById('cmpYear');
   if (yr) yr.textContent = money(perMonth(best) * 12);
 }
-function joinOr(a){ return a.length < 2 ? String(a[0]) : a.slice(0, -1).join(', ') + ' or ' + a[a.length - 1]; }
 
 function renderTerms(){
   var wrap = document.getElementById('terms');
