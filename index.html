@@ -15,7 +15,7 @@
   gtag('config', 'AW-18540604219');
 </script>
 <title>Nuvantu Health — Virtual Primary Care for $60/month</title>
-<meta name="description" content="A dedicated doctor, 24/7 urgent care, dermatology and counselling included. $60 a month, no contract. Enrol online in minutes.">
+<meta name="description" content="Virtual Primary Care for $60 a month with urgent care, dermatology and counselling included, or single-service plans for urgent care, behavioral health, dermatology and vet care from $21 a month.">
 <meta name="robots" content="noindex,nofollow">
 <!-- noindex stays until this moves to nuvantuhealth.com; a demo URL ranking
      for the brand would compete with the real site. -->
@@ -347,6 +347,30 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   .trust-in{gap:16px 22px;font-size:.82rem}
   .hero-photo{flex-direction:column;text-align:center}
 }
+/* ------------------------------------------------------------ care plans
+   One card per National Telehealth service. Prices and links come from
+   SERVICES in the script, so the cards and the checkout cannot disagree. */
+.svc{display:flex;flex-wrap:wrap;gap:22px;justify-content:center}
+.svc-card{flex:0 1 calc(33.333% - 15px);background:#fff;border:1px solid var(--line);
+  border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;position:relative;
+  transition:transform .15s,box-shadow .15s}
+.svc-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.svc-card.main{border-color:var(--warm);box-shadow:0 12px 28px -14px rgba(224,138,76,.65)}
+.svc-img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;display:block}
+.svc-tag{position:absolute;top:14px;left:14px;background:var(--warm);color:#fff;font-size:.74rem;
+  font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.svc-body{padding:20px 22px 22px;display:flex;flex-direction:column;flex:1}
+.svc-body h3{font-size:1.18rem;margin-bottom:4px}
+.svc-price{font-family:'Newsreader',serif;font-size:1.7rem;font-weight:700;color:var(--ink);line-height:1.1;margin-bottom:10px}
+.svc-price span{font-family:'Instrument Sans',sans-serif;font-size:.85rem;font-weight:500;color:var(--muted)}
+.svc-body p{font-size:.92rem;margin-bottom:10px}
+.svc-note{font-size:.8rem!important;color:var(--muted)}
+.svc-body .btn{margin-top:auto;width:100%}
+.svc-foot{text-align:center;margin-top:26px;font-size:.88rem;color:var(--muted);max-width:46rem;margin-left:auto;margin-right:auto}
+.hero-more{margin-top:10px;font-size:.92rem}
+.hero-more a{color:var(--blue-d);font-weight:600}
+@media(max-width:900px){ .svc-card{flex-basis:calc(50% - 11px)} }
+@media(max-width:600px){ .svc-card{flex-basis:100%} }
 </style>
 </head>
 <body>
@@ -358,6 +382,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
       <img src="img/logo.png" alt="Nuvantu Health" width="760" height="145" class="brand-logo">
     </a>
     <div class="hdr-right">
+      <a href="#plans" class="hdr-help">Plans</a>
       <a href="#faq" class="hdr-help">Questions</a>
       <a href="#enrol" class="hdr-cta" data-enrol>Get started</a>
     </div>
@@ -389,6 +414,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <a href="#ask" class="btn btn-ghost">I have a question first</a>
       </div>
       <p class="reassure">Enrol in about 5 minutes · Cancel any time · No insurance required</p>
+      <p class="hero-more">Only need one thing? <a href="#plans" id="heroFrom">Single-service plans from $21/month</a></p>
     </div>
 
     <div class="hero-art">
@@ -427,12 +453,29 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   </div>
 </section>
 
+<!-- ============================================================== plans
+     Primary Care stays the headline plan. The four single-service plans are
+     for people who only need one thing, at a lower monthly price. Cards are
+     built from SERVICES below. -->
+<section class="sec sec-sky" id="plans" style="padding:56px 0">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:34px">
+      <h2>Choose the care you need</h2>
+      <p>All-in-one Primary Care, or a single service on its own. Every plan is month to month and you can cancel any time.</p>
+    </div>
+    <div class="svc" id="svcGrid"></div>
+    <p class="svc-foot">Each plan is a separate monthly membership that renews until you cancel. Primary Care
+       already includes urgent care, dermatology and counselling, so there is no need to add those
+       on top of it.</p>
+  </div>
+</section>
+
 <!-- Everything included. Lifted out of the hero so the photograph can have the
      whole right-hand side, which is what makes the family read at a glance. -->
 <section class="sec" style="padding:56px 0">
   <div class="wrap incl-wrap">
     <div>
-      <h2 style="font-size:1.6rem;margin-bottom:10px">One membership, everything in it</h2>
+      <h2 style="font-size:1.6rem;margin-bottom:10px">Primary Care: one membership, everything in it</h2>
       <p style="font-size:.98rem">No per-visit charges on any of the below. You are not billed
          again for using it.</p>
       <!-- This column was mostly empty, which is the same dead-space problem the
@@ -443,7 +486,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
            width="811" height="695" loading="lazy">
     </div>
     <aside class="hero-card">
-      <h3>Everything included</h3>
+      <h3>Everything in Primary Care</h3>
       <p class="hc-sub">One membership. No per-visit charges on any of this.</p>
       <ul class="incl">
         <li><span class="tick"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></span>
@@ -641,6 +684,14 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <p>Yes, it renews automatically at the end of whichever term you choose, and keeps renewing
            until you cancel. You can cancel any time from your account. You keep access for the rest
            of the term you have already paid for, and you are not charged again after that.</p></details>
+      <details><summary>Primary Care or a single-service plan?</summary>
+        <p>Primary Care is the complete option: your own provider, plus 24/7 urgent care, dermatology
+           and counselling, for one monthly price. If you only need one of those, the single-service
+           plans cost less: Urgent Care, Behavioral Health, Dermatology, or Vet Care for your pet.</p></details>
+      <details><summary>What does Vet Care include?</summary>
+        <p>24/7 access to a licensed veterinarian by phone or video for advice about your pet's care.
+           It is advice only: the vet cannot diagnose, create treatment plans or prescribe. It is not
+           for emergencies. If your pet is in danger, go to an emergency vet straight away.</p></details>
       <details><summary>Is my family covered?</summary>
         <p>Not on this plan. There is a family membership that covers up to seven additional people
            on one subscription — ask us and we will send the details.</p></details>
@@ -692,10 +743,12 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
     <p class="f-disc">Nuvantu Health is a marketing and enrolment service. Medical care is delivered by
        independent, licensed providers through our clinical partner. Nuvantu Health does not practise
        medicine, does not provide medical advice, and does not guarantee any particular outcome.</p>
-    <p class="f-disc">This membership is not health insurance and is not a substitute for it. It does
+    <p class="f-disc">These memberships are not health insurance and are not a substitute for it. They do
        not meet the minimum essential coverage requirements of the Affordable Care Act. Psychology and
        psychiatry visits carry a separate fee. Prescription availability is at the discretion of the
        treating provider; controlled substances are not prescribed.</p>
+    <p class="f-disc">Vet Care provides general advice from licensed veterinarians only. It does not
+       include diagnosis, treatment plans or prescriptions, and it is not for emergencies.</p>
     <p class="f-disc">Figures shown in "what one year actually costs" are illustrative national
        averages for uninsured self-pay care, not quotes. Actual costs vary by location and provider.</p>
     <p class="f-disc">&copy; 2026 Nuvantu Health. All rights reserved.</p>
@@ -735,6 +788,29 @@ var ENROL_BASE = 'https://care.nationaltelehealthproviders.com/primary?partner_i
    redundant instruction and there is no upside to sending one. Set it only if
    the base link is ever swapped for a generic catalogue URL. */
 var ENROL_SERVICE = '';   /* primary-care | urgent-care | mental-health | dermatology | veterinary-care */
+
+/* The single-service plans. Same host and the same partner_id as ENROL_BASE;
+   only the path changes, and each path was opened to confirm it shows the
+   Nuvantu-branded National Telehealth checkout for that plan. Prices are the
+   monthly prices that checkout showed on 17 Nov 2026. If they ever change
+   there, change them here. */
+var CARE_HOST  = 'https://care.nationaltelehealthproviders.com/';
+var PARTNER_QS = '?partner_id=3SS1PBNZ';
+var SERVICES = [
+  {path:'primary', name:'Primary Care', price:null, img:'img/family-call.jpg', main:true,
+   blurb:'Your own provider, plus 24/7 urgent care, dermatology and counselling, all in one membership.',
+   note:'Psychology and psychiatry visits from $150 per visit.'},
+  {path:'urgent-care', name:'Urgent Care', price:28, img:'img/svc/urgent.jpg',
+   blurb:'24/7/365 on-demand access to licensed providers for common illnesses, with medication when appropriate.'},
+  {path:'behavior', name:'Behavioral Health', price:21, img:'img/svc/behavioral.jpg',
+   blurb:'24/7 crisis support and counselling at no extra cost, psychiatry by appointment, and 1,000+ medications at no cost if needed.',
+   note:'Psychology and psychiatry visits from $150 per visit.'},
+  {path:'dermatology', name:'Dermatology', price:35, img:'img/svc/dermatology.jpg',
+   blurb:'Photo-based consults for acne, eczema, rashes, hair loss and more. A board-certified provider replies within 24 hours.'},
+  {path:'vet-care', name:'Vet Care', price:21, img:'img/svc/vet.jpg',
+   blurb:"Talk to a licensed veterinarian 24/7 for advice about your pet's care.",
+   note:'Advice only: no diagnosis, treatment plans or prescriptions. Not for emergencies.'}
+];
 
 var LEAD_URL   = '';          /* Apps Script endpoint, same pattern as crashclaimreview */
 var LEAD_SECRET= '';
@@ -849,15 +925,16 @@ function renderTerms(){
    parameters join with & -- appending '?' a second time would silently break
    attribution, which is the kind of fault that only shows up in a payout
    report weeks later. */
-function enrolUrl(term){
-  if (!ENROL_BASE) return null;
-  var sep = ENROL_BASE.indexOf('?') === -1 ? '?' : '&';
+function enrolUrl(term, base){
+  base = base || ENROL_BASE;
+  if (!base) return null;
+  var sep = base.indexOf('?') === -1 ? '?' : '&';
   var qs  = [];
   if (ENROL_SERVICE) qs.push('service=' + encodeURIComponent(ENROL_SERVICE));
   qs.push('m=' + encodeURIComponent(String(term || best.months)));
   var sub = campaignSub();
   if (sub) qs.push('sub=' + sub);
-  return ENROL_BASE + sep + qs.join('&');
+  return base + sep + qs.join('&');
 }
 
 /* Campaign attribution. National Telehealth tags each order with the `sub`
@@ -885,8 +962,8 @@ function reportEnrolClick(){
   gtag('event', 'conversion', { send_to: GADS_SEND_TO });
 }
 
-function go(term){
-  var url = enrolUrl(term);
+function go(term, base){
+  var url = enrolUrl(term, base);
   if (!url) {                       /* demo mode: no link configured yet */
     alert('Enrolment link not connected yet.\n\nThis is the demo. Once the ' +
           'Care Services URL is in, this button takes you straight to signup ' +
@@ -917,7 +994,14 @@ document.getElementById('askForm').addEventListener('submit', function(e){
     document.getElementById('askForm').style.display = 'none';
     document.getElementById('askOk').style.display   = 'block';
   }
-  if (!LEAD_URL) { setTimeout(done, 450); return; }   /* demo mode */
+  /* Not connected yet: say so, rather than promising a call nobody will make. */
+  if (!LEAD_URL) {
+    btn.disabled = false; btn.textContent = 'Request a call back';
+    var ok = document.getElementById('askOk');
+    ok.innerHTML = '<b>Sorry, call backs are not available online yet.</b> Please email ' +
+      '<a href="mailto:support@nuvantuhealth.com">support@nuvantuhealth.com</a> and we will get back to you.';
+    done(); return;
+  }
 
   var fd = new FormData(document.getElementById('askForm'));
   fd.set('secret', LEAD_SECRET);
@@ -931,8 +1015,36 @@ document.getElementById('askForm').addEventListener('submit', function(e){
     .catch(function(){ clearTimeout(giveUp); done(); });
 });
 
+/* Plan cards. Primary Care takes its price from PLANS, the rest from SERVICES. */
+function renderServices(){
+  var grid = document.getElementById('svcGrid');
+  if (!grid) return;
+  var esc = function(t){ var d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+  SERVICES.forEach(function(s){
+    var price = s.price === null ? perMonth(best) : s.price;
+    var base  = s.path === 'primary' ? ENROL_BASE : CARE_HOST + s.path + PARTNER_QS;
+    var card  = document.createElement('div');
+    card.className = 'svc-card' + (s.main ? ' main' : '');
+    card.innerHTML =
+      (s.main ? '<span class="svc-tag">Most complete</span>' : '') +
+      '<img class="svc-img" src="' + s.img + '" alt="" width="720" height="540" loading="lazy">' +
+      '<div class="svc-body"><h3>' + esc(s.name) + '</h3>' +
+      '<div class="svc-price">' + money(price) + ' <span>per month</span></div>' +
+      '<p>' + esc(s.blurb) + '</p>' +
+      (s.note ? '<p class="svc-note">' + esc(s.note) + '</p>' : '') +
+      '<a href="#enrol" class="btn ' + (s.main ? 'btn-primary' : 'btn-ghost') + '">Start ' + esc(s.name) + '</a></div>';
+    card.querySelector('.btn').addEventListener('click', function(e){ e.preventDefault(); go(1, base); });
+    grid.appendChild(card);
+  });
+  var from = Math.min.apply(null, SERVICES.filter(function(s){ return s.price !== null; })
+                                          .map(function(s){ return s.price; }));
+  var hf = document.getElementById('heroFrom');
+  if (hf) hf.textContent = 'Single-service plans from ' + money(from) + '/month';
+}
+
 renderHero();
 renderTerms();
+renderServices();
 </script>
 </body>
 </html>
