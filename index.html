@@ -366,6 +366,14 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
 .svc-body p{font-size:.92rem;margin-bottom:10px}
 .svc-note{font-size:.8rem!important;color:var(--muted)}
 .svc-body .btn{margin-top:auto;width:100%}
+.svc-terms{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:var(--sky);border:1px solid var(--line);
+  border-radius:12px;padding:4px;margin:6px 0 12px}
+.svc-terms button{border:0;background:none;border-radius:9px;padding:8px 2px;font:600 .78rem 'Instrument Sans',sans-serif;
+  color:var(--body);cursor:pointer;white-space:nowrap}
+.svc-terms button.on{background:#fff;color:var(--blue-d);box-shadow:0 1px 3px rgba(22,32,43,.12)}
+.svc-save{font-style:normal;font-family:'Instrument Sans',sans-serif;font-size:.75rem;font-weight:700;color:#fff;
+  background:var(--good);padding:3px 8px;border-radius:999px;vertical-align:middle}
+.svc-billed{font-size:.8rem;color:var(--muted);margin:-4px 0 12px}
 .svc-foot{text-align:center;margin-top:26px;font-size:.88rem;color:var(--muted);max-width:46rem;margin-left:auto;margin-right:auto}
 .hero-more{margin-top:10px;font-size:.92rem}
 .hero-more a{color:var(--blue-d);font-weight:600}
@@ -461,10 +469,10 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:34px">
       <h2>Choose the care you need</h2>
-      <p>All-in-one Primary Care, or a single service on its own. Every plan is month to month and you can cancel any time.</p>
+      <p>All-in-one Primary Care, or a single service on its own. Pay monthly, or choose 3, 6 or 12 months. Every plan renews until you cancel.</p>
     </div>
     <div class="svc" id="svcGrid"></div>
-    <p class="svc-foot">Each plan is a separate monthly membership that renews until you cancel. Primary Care
+    <p class="svc-foot">Each plan is a separate membership that renews at the end of the length you pick until you cancel. Primary Care
        already includes urgent care, dermatology and counselling, so there is no need to add those
        on top of it.</p>
   </div>
@@ -560,8 +568,8 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <div class="step-top">
           <span class="step-n">1</span>
         </div>
-        <h3>Choose your term</h3>
-        <p>One plan, $60 a month, no contract. Start today and stop whenever you want — there is nothing to commit to up front.</p>
+        <h3>Choose your plan</h3>
+        <p>Pick the care you need and pay monthly, or choose 3, 6 or 12 months up front. Cancel any time, and it will not renew.</p>
       </div>
       <div class="step">
         <div class="step-top">
@@ -640,7 +648,7 @@ footer{background:var(--ink);color:#9FADBB;padding:46px 0 34px;font-size:.87rem}
         <div class="cmp-row"><span>Doctor visits, unlimited</span><b>Included</b></div>
         <div class="cmp-row"><span>Dermatology consult</span><b>Included</b></div>
         <div class="cmp-row"><span>Counselling session &times; 2</span><b>Included</b></div>
-        <div class="cmp-total"><span>Total for the year</span><span id="cmpYear">$720</span></div>
+        <div class="cmp-total"><span>Total for the year on a 3, 6 or 12-month plan</span><span id="cmpYear">$420</span></div>
       </div>
     </div>
   </div>
@@ -792,42 +800,39 @@ var ENROL_SERVICE = '';   /* primary-care | urgent-care | mental-health | dermat
 /* The single-service plans. Same host and the same partner_id as ENROL_BASE;
    only the path changes, and each path was opened to confirm it shows the
    Nuvantu-branded National Telehealth checkout for that plan. Prices are the
-   monthly prices that checkout showed on 17 Nov 2026. The paths match the
+   prices that checkout showed on 17 Nov 2026 for each plan length
+   (1, 3, 6 and 12 months; the figure is the TOTAL charged for that length). The paths match the
    links the client copied from the partner portal (Partner Links > Care Services). If they ever change
    there, change them here. */
 var CARE_HOST  = 'https://care.nationaltelehealthproviders.com/';
 var PARTNER_QS = '?partner_id=3SS1PBNZ';
 var SERVICES = [
-  {path:'primary', name:'Primary Care', short:'Primary Care', price:null, img:'img/family-call.jpg', main:true,
+  {path:'primary', name:'Primary Care', short:'Primary Care', terms:{1:60, 3:105, 6:210, 12:420}, img:'img/family-call.jpg', main:true,
    blurb:'Your own provider, plus 24/7 urgent care, dermatology and counselling, all in one membership.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
-  {path:'urgent-care', name:'Urgent Care', short:'Urgent Care', price:28, img:'img/svc/urgent.jpg',
+  {path:'urgent-care', name:'Urgent Care', short:'Urgent Care', terms:{1:28, 3:84, 6:168, 12:336}, img:'img/svc/urgent.jpg',
    blurb:'Get 24/7 access to licensed providers for fast treatment of common illnesses, with prescriptions sent to your preferred pharmacy for pickup if prescribed.'},
-  {path:'urgent-plus', name:'Urgent Care + Prescription Discount Program', short:'Urgent Care + Rx', price:35, img:'img/svc/urgent-plus.jpg',
+  {path:'urgent-plus', name:'Urgent Care + Prescription Discount Program', short:'Urgent Care + Rx', terms:{1:35, 3:105, 6:210, 12:420}, img:'img/svc/urgent-plus.jpg',
    blurb:'Access 24/7 urgent care for hundreds of common conditions, with prescriptions sent to your pharmacy of choice and many medications available for free or less if prescribed.'},
-  {path:'behavior', name:'Behavioral Health + Prescription Discount Program', short:'Behavioral Health', price:21, img:'img/svc/behavioral.jpg',
+  {path:'behavior', name:'Behavioral Health + Prescription Discount Program', short:'Behavioral Health', terms:{1:21, 3:63, 6:126, 12:252}, img:'img/svc/behavioral.jpg',
    blurb:'Connect with licensed mental health providers for scheduled therapy and psychiatry visits, with prescriptions sent to your preferred pharmacy if prescribed and many medications available for free.',
    note:'Psychology and psychiatry visits from $150 per visit.'},
-  {path:'dermatology', name:'Dermatology', short:'Dermatology', price:35, img:'img/svc/dermatology.jpg',
+  {path:'dermatology', name:'Dermatology', short:'Dermatology', terms:{1:35, 3:105, 6:210, 12:420}, img:'img/svc/dermatology.jpg',
    blurb:'Schedule a dermatology consultation, describe the problem and upload photos. A licensed dermatologist reviews them, makes a diagnosis and gives you a treatment plan.',
    note:'Also included in Primary Care.'},
-  {path:'vet-care', name:'Vet Care', short:'Vet Care', price:21, img:'img/svc/vet.jpg',
+  {path:'vet-care', name:'Vet Care', short:'Vet Care', terms:{1:21, 3:63, 6:126, 12:252}, img:'img/svc/vet.jpg',
    blurb:'Get 24/7 access to licensed veterinarians for general pet care guidance and advice, for informational purposes only and not for diagnosis, treatment, or emergencies.'}
 ];
 
 var LEAD_URL   = '';          /* Apps Script endpoint, same pattern as crashclaimreview */
 var LEAD_SECRET= '';
 
-/* Month-to-month only, by the client's decision, to launch with the lowest
-   possible barrier: no commitment to weigh up, one number to accept.
-
-   Everything downstream is computed from this array -- the headline price, the
-   billing line, the year-cost comparison, and whether the term chooser appears
-   at all. Adding the longer terms back is a matter of restoring the rows; no
-   copy anywhere hard-codes a figure that would then go stale. */
-var PLANS = [
-  {months:1,  total:60,  label:'Monthly'}
-];
+/* Primary Care's plan lengths. Taken from SERVICES so the hero and the cards
+   can never disagree. Since 17 Nov 2026 visitors choose 1, 3, 6 or 12 months
+   (client's decision); the hero still leads with the monthly price. */
+var PLANS = [1, 3, 6, 12].map(function(m){
+  return {months:m, total:SERVICES[0].terms[m], label: m === 1 ? 'Monthly' : m + ' months'};
+});
 
 /* -------------------------------------------------------------- price maths
    Per-month is computed, never typed. On their current page the annual option
@@ -854,41 +859,19 @@ var best     = atLowest[0];                      /* shortest term at the best ra
 var uniqueWinner = atLowest.length === 1;
 
 function renderHero(){
-  document.getElementById('heroPrice').textContent  = money(perMonth(best));
-  /* The renewal wording is not optional dressing. Their checkout says "you
-     agree to start a recurring subscription", and "Billed $105 for 3 months"
-     on its own reads as a one-off purchase. A page that implies one-off and a
-     checkout that charges again in three months is how you collect chargebacks
-     and complaints, and auto-renewal is a regulated disclosure in the US. Say
-     it before the click, not after. */
+  /* The client's headline is the monthly price. The longer terms are offered
+     underneath as the cheaper option, never instead of it. */
+  document.getElementById('heroPrice').textContent  = money(perMonth(monthly));
+  var longer = PLANS.filter(function(p){ return p.months > 1 && perMonth(p) < perMonth(monthly); });
   document.getElementById('heroBilled').textContent =
-    (best.months === 1
-      ? 'Billed ' + money(perMonth(monthly)) + ' monthly, renewing until you cancel.'
-      : 'Billed ' + money(best.total) + ' every ' + best.months + ' months, renewing until you cancel.')
-    /* Only mention the monthly fallback when it is a DIFFERENT option. With a
-       single monthly plan, "month-to-month available at $60" restates the line
-       it is attached to and reads like a mistake. */
-    + (best.months === 1 ? '' : ' Month-to-month available at ' + money(perMonth(monthly)) + '.');
-
-  /* The enrol button names the term it will actually send them to. */
-  var cta = document.getElementById('termCta');
-  if (cta) {
-    cta.childNodes[0].nodeValue = best.months === 1
-      ? 'Continue with the monthly plan '
-      : 'Continue with the ' + best.months + '-month plan ';
-  }
-  var pct = Math.round((1 - perMonth(best) / perMonth(monthly)) * 100);
-  var el  = document.getElementById('heroSave');
-  if (pct > 0) { el.textContent = 'Save ' + pct + '%'; } else { el.style.display = 'none'; }
-
-  /* The "what one year costs" figure is the recommended plan run for twelve
-     months. It was hard-coded at $420 when the annual term existed; on the
-     $60 monthly plan that would have quietly understated the real cost by
-     $300 while sitting next to a $1,170 comparison, which is precisely the
-     sort of stale number that turns a fair comparison into a false one. */
+    'Billed ' + money(perMonth(monthly)) + ' monthly, renewing until you cancel.' +
+    (longer.length ? ' Or ' + money(lowestPM) + '/month when you choose ' +
+       joinOr(longer.map(function(p){ return p.months; })) + ' months.' : '');
+  document.getElementById('heroSave').style.display = 'none';
   var yr = document.getElementById('cmpYear');
   if (yr) yr.textContent = money(perMonth(best) * 12);
 }
+function joinOr(a){ return a.length < 2 ? String(a[0]) : a.slice(0, -1).join(', ') + ' or ' + a[a.length - 1]; }
 
 function renderTerms(){
   var wrap = document.getElementById('terms');
@@ -1024,29 +1007,53 @@ function renderServices(){
   if (!grid) return;
   var esc = function(t){ var d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
   SERVICES.forEach(function(s){
-    var price = s.price === null ? perMonth(best) : s.price;
     var base  = s.path === 'primary' ? ENROL_BASE : CARE_HOST + s.path + PARTNER_QS;
+    var term  = 1;
     var card  = document.createElement('div');
     card.className = 'svc-card' + (s.main ? ' main' : '');
     card.innerHTML =
       (s.main ? '<span class="svc-tag">Most complete</span>' : '') +
       '<img class="svc-img" src="' + s.img + '" alt="" width="720" height="540" loading="lazy">' +
       '<div class="svc-body"><h3>' + esc(s.name) + '</h3>' +
-      '<div class="svc-price">' + money(price) + ' <span>per month</span></div>' +
+      '<div class="svc-terms" role="group" aria-label="Plan length">' +
+        [1, 3, 6, 12].map(function(m){
+          return '<button type="button" data-m="' + m + '"' + (m === 1 ? ' class="on" aria-pressed="true"' : ' aria-pressed="false"') +
+                 '>' + (m === 1 ? '1 month' : m + ' months') + '</button>';
+        }).join('') + '</div>' +
+      '<div class="svc-price"></div><div class="svc-billed"></div>' +
       '<p>' + esc(s.blurb) + '</p>' +
       (s.note ? '<p class="svc-note">' + esc(s.note) + '</p>' : '') +
       '<a href="#enrol" class="btn ' + (s.main ? 'btn-primary' : 'btn-ghost') + '">Start ' + esc(s.short) + '</a></div>';
-    card.querySelector('.btn').addEventListener('click', function(e){ e.preventDefault(); go(1, base); });
+    var show = function(){
+      var total = s.terms[term], pm = total / term, save = Math.round((1 - pm / s.terms[1]) * 100);
+      card.querySelector('.svc-price').innerHTML = money(pm) + ' <span>per month</span>' +
+        (save > 0 ? ' <em class="svc-save">Save ' + save + '%</em>' : '');
+      card.querySelector('.svc-billed').textContent = term === 1
+        ? 'Billed ' + money(total) + ' monthly, renews until you cancel'
+        : 'Billed ' + money(total) + ' every ' + term + ' months, renews until you cancel';
+    };
+    Array.prototype.forEach.call(card.querySelectorAll('.svc-terms button'), function(b){
+      b.addEventListener('click', function(){
+        term = +b.getAttribute('data-m');
+        Array.prototype.forEach.call(card.querySelectorAll('.svc-terms button'), function(x){
+          var on = x === b; x.classList.toggle('on', on); x.setAttribute('aria-pressed', on);
+        });
+        show();
+      });
+    });
+    show();
+    card.querySelector('.btn').addEventListener('click', function(e){ e.preventDefault(); go(term, base); });
     grid.appendChild(card);
   });
-  var from = Math.min.apply(null, SERVICES.filter(function(s){ return s.price !== null; })
-                                          .map(function(s){ return s.price; }));
+  var from = Math.min.apply(null, SERVICES.slice(1).map(function(s){ return s.terms[1]; }));
   var hf = document.getElementById('heroFrom');
   if (hf) hf.textContent = 'Single-service plans from ' + money(from) + '/month';
 }
 
 renderHero();
-renderTerms();
+/* The term choice now lives on every plan card, so the separate Primary Care
+   "Pick a term" section stays hidden rather than asking the same thing twice. */
+document.getElementById('termsSection').style.display = 'none';
 renderServices();
 </script>
 </body>
